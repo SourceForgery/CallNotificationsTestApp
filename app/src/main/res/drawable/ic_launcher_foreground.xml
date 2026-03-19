@@ -32,11 +32,10 @@ L60,50 C61,47 60,44 58,42
 C56,40 50,40 46,42 Z" />
 
     <!-- Notification badge (top-right circle) - purple -->
-    <circle
+    <!-- Circle at cx=72 cy=36 r=10 expressed as two semicircular arcs (no <circle> in VectorDrawable) -->
+    <path
         android:fillColor="#7B1FA2"
-        android:cx="72"
-        android:cy="36"
-        android:r="10" />
+        android:pathData="M72,26 A10,10 0 1,0 72,46 A10,10 0 1,0 72,26 Z" />
 
     <!-- Bell icon inside badge (white) -->
     <path
