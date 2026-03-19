@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Call Notifications</string>
+    <string name="btn_old_style_answer_decline">1. Old-style: Answér, Décline</string>
+    <string name="btn_old_style_decline_answer">2. Old-style: Décline, Answér</string>
+    <string name="btn_colored_buttons">3. Colored: Purple Décline, Blue Answér</string>
+    <string name="btn_call_style">4. CallStyle notification</string>
+    <string name="btn_close_all">5. Close all notifications</string>
+    <string name="status_default">No button pressed yet</string>
+    <string name="caller_name">John Doe</string>
+    <string name="action_answer">Answér</string>
+    <string name="action_decline">Décline</string>
+    <string name="notification_title">Incoming Call</string>
+</resources>
