@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- Required on API 34+ for foreground services of type phoneCall -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <!-- Also required on API 34+ alongside FOREGROUND_SERVICE_PHONE_CALL to start a phoneCall-type
+         foreground service (the other option is holding the DIALER role, which is unsuitable for
+         a test app). -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
 
     <application
         android:allowBackup="true"
