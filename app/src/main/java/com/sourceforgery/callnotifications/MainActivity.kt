@@ -189,6 +189,16 @@ class MainActivity : AppCompatActivity() {
             .setImportant(true)
             .build()
 
+        // CallStyle notifications on API 31+ require a foreground service, a user-initiated job,
+        // or a fullScreenIntent.  A fullScreenIntent is the simplest approach for a test app and
+        // also ensures the call UI surfaces on a locked screen.
+        val fullScreenIntent = PendingIntent.getActivity(
+            this,
+            NOTIFICATION_ID_4,
+            Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_call_notification)
             .setContentTitle(getString(R.string.notification_title))
@@ -196,6 +206,7 @@ class MainActivity : AppCompatActivity() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_CALL)
             .setOngoing(true)
+            .setFullScreenIntent(fullScreenIntent, true)
             .setStyle(
                 NotificationCompat.CallStyle.forIncomingCall(
                     caller,
