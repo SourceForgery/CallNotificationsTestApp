@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Required for full-screen call notifications on API 34+; auto-granted for CATEGORY_CALL apps -->
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Required on API 34+ for foreground services of type phoneCall -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,11 @@
         <receiver
             android:name=".NotificationActionReceiver"
             android:exported="false" />
+
+        <service
+            android:name=".CallService"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall" />
 
     </application>
 </manifest>

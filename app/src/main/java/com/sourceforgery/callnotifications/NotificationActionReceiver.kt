@@ -12,10 +12,16 @@ class NotificationActionReceiver : BroadcastReceiver() {
         val buttonName = intent.getStringExtra(MainActivity.EXTRA_BUTTON_NAME) ?: return
         val notificationId = intent.getIntExtra(MainActivity.EXTRA_NOTIFICATION_ID, 0)
 
-        // Cancel the notification so it disappears when a button is pressed
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(notificationId)
+        // Notification 4 is owned by a foreground service; stop the service so that
+        // Android removes its notification automatically.  For all other notifications
+        // a direct cancel() is sufficient.
+        if (notificationId == MainActivity.NOTIFICATION_ID_4) {
+            context.stopService(Intent(context, CallService::class.java))
+        } else {
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(notificationId)
+        }
 
         // Forward the click info to the main activity via a local broadcast
         val updateIntent = Intent(MainActivity.ACTION_BUTTON_CLICKED).apply {

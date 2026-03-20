@@ -16,7 +16,6 @@ import android.widget.RemoteViews
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.app.Person
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 // LocalBroadcastManager is deprecated but is the simplest choice for this test app.
@@ -178,51 +177,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     // -------------------------------------------------------------------------
-    // Button 4 – CallStyle (Android 12 / API 31+, degrades gracefully below)
+    // Button 4 – CallStyle via a phoneCall foreground service (API 31+)
     // -------------------------------------------------------------------------
     private fun showNotification4() {
-        val answer = getString(R.string.action_answer)
-        val decline = getString(R.string.action_decline)
-
-        val caller = Person.Builder()
-            .setName(getString(R.string.caller_name))
-            .setImportant(true)
-            .build()
-
-        // CallStyle notifications on API 31+ require a foreground service, a user-initiated job,
-        // or a fullScreenIntent.  A fullScreenIntent is the simplest approach for a test app and
-        // also ensures the call UI surfaces on a locked screen.
-        val fullScreenIntent = PendingIntent.getActivity(
-            this,
-            NOTIFICATION_ID_4,
-            Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_call_notification)
-            .setContentTitle(getString(R.string.notification_title))
-            .setContentText(getString(R.string.caller_name))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setOngoing(true)
-            .setFullScreenIntent(fullScreenIntent, true)
-            .setStyle(
-                NotificationCompat.CallStyle.forIncomingCall(
-                    caller,
-                    actionPendingIntent(decline, NOTIFICATION_ID_4),
-                    actionPendingIntent(answer, NOTIFICATION_ID_4)
-                )
-            )
-            .build()
-
-        getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID_4, notification)
+        // The CallStyle notification is posted by CallService via startForeground().
+        // Running as a foreground service with foregroundServiceType="phoneCall" satisfies
+        // the Android 12+ requirement that CallStyle notifications be tied to a foreground
+        // service, user-initiated job, or fullScreenIntent.
+        startService(Intent(this, CallService::class.java))
     }
 
     // -------------------------------------------------------------------------
     // Button 5 – dismiss every notification from this app
     // -------------------------------------------------------------------------
     private fun closeAllNotifications() {
+        // Stop the CallService foreground service so its notification is also removed.
+        stopService(Intent(this, CallService::class.java))
         getSystemService(NotificationManager::class.java).cancelAll()
     }
 }
